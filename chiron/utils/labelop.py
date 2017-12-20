@@ -5,21 +5,21 @@ def get_label_segment(fast5_fn, basecall_group, basecall_subgroup):
     try:
         fast5_data = h5py.File(fast5_fn, 'r')
     except IOError:
-        raise IOError, 'Error opening file. Likely a corrupted file.'
+        raise IOError('Error opening file. Likely a corrupted file.')
 
     #Get samping rate
     try:
         fast5_info = fast5_data['UniqueGlobalKey/channel_id'].attrs
         sampling_rate = fast5_info['sampling_rate'].astype('int_')
     except:
-        raise RuntimeError, ('Could not get channel info')
+        raise RuntimeError('Could not get channel info')
 
     # Read raw data
     try:
         raw_dat = fast5_data['/Raw/Reads/'].values()[0]
         raw_attrs = raw_dat.attrs
     except:
-        raise RuntimeError, (
+        raise RuntimeError(
             'Raw data is not stored in Raw/Reads/Read_[read#] so ' +
             'new segments cannot be identified.')
     raw_start_time = raw_attrs['start_time']
@@ -50,7 +50,7 @@ def get_label_segment(fast5_fn, basecall_group, basecall_subgroup):
          dtype=[('mean','float64'),('stdv','float64'),('start', '<u4'), ('length', '<u4'),  ('kmer', 'S5'), ('move','<u4'), ('cstart','<u4'), ('clength','<u4')])
 
     except:
-        raise RuntimeError, (
+        raise RuntimeError(
             'No events or corrupted events in file. Likely a ' +
             'segmentation error or mis-specified basecall-' +
             'subgroups (--2d?).')
@@ -60,7 +60,7 @@ def get_label_segment(fast5_fn, basecall_group, basecall_subgroup):
         corr_attrs = dict(corr_dat.attrs.items())
         corr_dat = corr_dat .value
     except:
-        raise RuntimeError, (
+        raise RuntimeError(
             'Corrected data know found.')
 
     corr_start_time = corr_attrs['read_start_rel_to_raw']
@@ -120,7 +120,7 @@ def get_label_raw(fast5_fn, basecall_group, basecall_subgroup):
     try:
         fast5_data = h5py.File(fast5_fn, 'r')
     except IOError:
-        raise IOError, 'Error opening file. Likely a corrupted file.'
+        raise IOError('Error opening file. Likely a corrupted file.')
 
     #Get raw data
     try:
@@ -128,7 +128,7 @@ def get_label_raw(fast5_fn, basecall_group, basecall_subgroup):
         #raw_attrs = raw_dat.attrs
         raw_dat = raw_dat['Signal'].value
     except:
-        raise RuntimeError, (
+        raise RuntimeError(
             'Raw data is not stored in Raw/Reads/Read_[read#] so ' +
             'new segments cannot be identified.')
 
@@ -138,7 +138,7 @@ def get_label_raw(fast5_fn, basecall_group, basecall_subgroup):
         corr_attrs = dict(corr_data.attrs.items())
         corr_data = corr_data .value
     except:
-        raise RuntimeError, (
+        raise RuntimeError(
             'Corrected data know found.')
 
     fast5_info = fast5_data['UniqueGlobalKey/channel_id'].attrs
@@ -149,7 +149,7 @@ def get_label_raw(fast5_fn, basecall_group, basecall_subgroup):
 
     if any(len(vals) <= 1 for vals in (
         corr_data, raw_dat)):
-        raise NotImplementedError, (
+        raise NotImplementedError(
             'One or no segments or signal present in read.')
 
     event_starts  = corr_data['start'] + corr_start_rel_to_raw

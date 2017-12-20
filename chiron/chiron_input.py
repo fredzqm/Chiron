@@ -136,11 +136,12 @@ class DataSet(object):
     
     def read_into_memory(self,index):
         event = np.asarray(zip([self._event[i] for i in index],[self._event_length[i] for i in index]))
-	if not self.for_eval:
-        	label = np.asarray(zip([self._label[i] for i in index],[self._label_length[i] for i in index]))
+        if not self.for_eval:
+            label = np.asarray(zip([self._label[i] for i in index],[self._label_length[i] for i in index]))
         else:
-		label = []
-	return event,label
+            label = []
+        return event,label
+    
     def next_batch(self, batch_size,shuffle = True):
         """Return next batch in batch_size from the data set.
             Input Args:
@@ -413,11 +414,11 @@ def base2ind(base,alphabet_n = 4,base_n = 1):
 #
 def main():
 ### Input Test ###
-	Data_dir = "/media/haotianteng/Linux_ex/Nanopore_data/Lambda_R9.4/raw/"
-	train = read_raw_data_sets(Data_dir,seq_length = 400)
-	for i in range(100):
-	    inputX,sequence_length,label = train.next_batch(10)
-	    indxs,values,shape = label
+    Data_dir = "/media/haotianteng/Linux_ex/Nanopore_data/Lambda_R9.4/raw/"
+    train = read_raw_data_sets(Data_dir,seq_length = 400)
+    for i in range(100):
+        inputX,sequence_length,label = train.next_batch(10)
+        indxs,values,shape = label
 if __name__=='__main__':
     main()
 #    

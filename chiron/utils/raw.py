@@ -5,7 +5,7 @@ Created on Mon Apr 10 04:16:40 2017
 
 @author: haotianteng
 """
-import labelop
+import utils.labelop
 import os,argparse,sys
 
 def extract(raw_folder = None):

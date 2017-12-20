@@ -160,7 +160,7 @@ def getcnnfeature(signal,training):
 
 def getcnnlogit(fea,outnum=5):
     feashape = fea.get_shape().as_list()
-    print feashape
+    print(feashape)
     fea_len = feashape[-1]
     fea = tf.reshape(fea,[-1,fea_len])
     W = tf.get_variable("logit_weights", shape=[fea_len,outnum],initializer=tf.contrib.layers.xavier_initializer())

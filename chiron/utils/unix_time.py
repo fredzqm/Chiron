@@ -6,7 +6,7 @@ Created on Sat Jun 10 03:44:44 2017
 @author: haotianteng
 """
 
-from resource import getrusage as resource_usage, RUSAGE_SELF
+# from resource import resource_usage, RUSAGE_SELF
 from time import time as timestamp
 
 
@@ -19,13 +19,16 @@ def unix_time(function, args=tuple(), kwargs={}):
     the operating system's software clock (check `man 7 time` for more
     details).
     '''
-    start_time, start_resources = timestamp(), resource_usage(RUSAGE_SELF)
+    start_time =timestamp()
+    # start_resources = resource_usage(RUSAGE_SELF)
     function(*args, **kwargs)
-    end_resources, end_time = resource_usage(RUSAGE_SELF), timestamp()
+    # end_resources = resource_usage(RUSAGE_SELF), 
+    end_time = timestamp()
 
-    return {'real': end_time - start_time,
-            'sys': end_resources.ru_stime - start_resources.ru_stime,
-            'user': end_resources.ru_utime - start_resources.ru_utime}
+
+    return {'real': end_time - start_time}
+            # 'sys': end_resources.ru_stime - start_resources.ru_stime,
+            # 'user': end_resources.ru_utime - start_resources.ru_utime
 
 
 if __name__ == '__main__':
@@ -33,7 +36,7 @@ if __name__ == '__main__':
         b = 1
         for i in xrange(iterations):
             b **= 2
-    print "test"
+    print("test")
 
     print(unix_time(test, (10, )))
     print(unix_time(test, (100, )))

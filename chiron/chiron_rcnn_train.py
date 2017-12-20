@@ -91,22 +91,22 @@ def train():
         indxs,values,shape = batch_y
         feed_dict =  {x:batch_x,seq_length:seq_len/ratio,y_indexs:indxs,y_values:values,y_shape:shape,training:True}
         loss_val,_ = sess.run([ctc_loss,opt],feed_dict = feed_dict)
-        if i%10 ==0:
-	    global_step_val = tf.train.global_step(sess,global_step)
+        if i%10 == 0:
+            global_step_val = tf.train.global_step(sess,global_step)
             valid_x,valid_len,valid_y = train_ds.next_batch(FLAGS.batch_size)
             indxs,values,shape = valid_y
             feed_dict = {x:valid_x,seq_length:valid_len/ratio,y_indexs:indxs,y_values:values,y_shape:shape,training:True}
             error_val = sess.run(error,feed_dict = feed_dict)
-	    end = time.time()
-            print "Step %d/%d Epoch %d, batch number %d, loss: %5.3f edit_distance: %5.3f Elapsed Time/step: %5.3f"\
-            %(i,FLAGS.max_steps,train_ds.epochs_completed,train_ds.index_in_epoch,loss_val,error_val,(end-start)/(i+1))
+            end = time.time()
+            print("Step %d/%d Epoch %d, batch number %d, loss: %5.3f edit_distance: %5.3f Elapsed Time/step: %5.3f"\
+            %(i,FLAGS.max_steps,train_ds.epochs_completed,train_ds.index_in_epoch,loss_val,error_val,(end-start)/(i+1)))
             saver.save(sess,FLAGS.log_dir+FLAGS.model_name+'/model.ckpt',global_step=global_step_val)
             summary_str = sess.run(summary, feed_dict=feed_dict)
             summary_writer.add_summary(summary_str, global_step = global_step_val)
             summary_writer.flush()
     global_step_val = tf.train.global_step(sess,global_step)
-    print "Model %s saved."%(FLAGS.log_dir+FLAGS.model_name)
-    print "Reads number %d"%(train_ds.reads_n)       
+    print("Model %s saved."%(FLAGS.log_dir+FLAGS.model_name))
+    print("Reads number %d"%(train_ds.reads_n))
     saver.save(sess,FLAGS.log_dir+FLAGS.model_name+'/final.ckpt',global_step=global_step_val)
 def run(args):
     global FLAGS

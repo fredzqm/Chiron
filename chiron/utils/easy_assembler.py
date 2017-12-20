@@ -128,7 +128,7 @@ def mc_path(logits,base_type,sample_n = 300):
         ###
         merge_path.append(list2string(temp_path,base_type=base_type))
     path_count = Counter(merge_path)
-    print path_count
+    print(path_count)
     max2path = path_count.most_common(2)
     p1 = max2path[0][1]/float(sample_n)
     p2 = max2path[1][1]/float(sample_n)
@@ -162,7 +162,7 @@ def mc_decoding(logits,base_type,sample_n = 300):
     
     sample_index = np.zeros((sample_n,T))
     for i in range(batch_size):
-        print i
+        print(i)
         sample = np.random.random((sample_n,T))
         for j in range(T):
             sample_index[:,j] = np.searchsorted(interval[i,j,:],sample[:,j],side='left')
@@ -173,7 +173,7 @@ def mc_decoding(logits,base_type,sample_n = 300):
             ###
             merge_path.append(list2string(temp_path,base_type=base_type))
         path_count = Counter(merge_path)
-        print path_count
+        print(path_count)
         max2path = path_count.most_common(2)
         p1 = max2path[0][1]/float(sample_n)
         p2 = max2path[1][1]/float(sample_n)
