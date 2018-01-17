@@ -20,8 +20,9 @@ def inference(x,seq_length,training):
     cnn_feature = getcnnfeature(x,training = training)
     feashape = cnn_feature.get_shape().as_list()
     ratio = FLAGS.segment_len/feashape[1]
-    logits = rnn_layers(cnn_feature,seq_length/ratio,training,class_n = 5 )
-#    logits = rnn_layers_one_direction(cnn_feature,seq_length/ratio,training,class_n = 4**FLAGS.k_mer+1 ) 
+    # print(seq_length, tf.constant(ratio, dtype=tf.float32), ratio)
+    logits = rnn_layers(cnn_feature,seq_length,training,class_n = 5 )
+#    logits = rnn_layers_one_direction(cnn_feature,seq_length/ratio,training,class_n = 4**FLAGS.k_mer+1 )
 #    logits = getcnnlogit(cnn_feature)
     return logits,ratio
 
@@ -113,8 +114,8 @@ def evaluation():
     config=tf.ConfigProto(allow_soft_placement=True,intra_op_parallelism_threads=FLAGS.threads,inter_op_parallelism_threads=FLAGS.threads)
     config.gpu_options.allow_growth = True
     with tf.Session(config = config) as sess:
-     saver = tf.train.Saver()
-     saver.restore(sess,tf.train.latest_checkpoint(FLAGS.model))
+     # saver = tf.train.Saver()
+     # saver.restore(sess,tf.train.latest_checkpoint(FLAGS.model))
      if os.path.isdir(FLAGS.input):
          file_list = os.listdir(FLAGS.input)
          file_dir = FLAGS.input
@@ -130,7 +131,8 @@ def evaluation():
          os.makedirs(os.path.join(FLAGS.output,'result'))
      if not os.path.exists(os.path.join(FLAGS.output,'meta')):
          os.makedirs(os.path.join(FLAGS.output,'meta'))
-     ##    
+     ##
+     sess.run(tf.global_variables_initializer())
      for name in file_list:
          start_time = time.time()
          if not name.endswith('.signal'):
@@ -185,7 +187,8 @@ def run(args):
     FLAGS=args
     time_dict=unix_time(evaluation)
     print(FLAGS.output)
-    print('Real time:%5.3f Systime:%5.3f Usertime:%5.3f'%(time_dict['real'],time_dict['sys'],time_dict['user']))
+    print('Real time:%5.3f'%(time_dict['real']))
+    # print('Real time:%5.3f Systime:%5.3f Usertime:%5.3f'%(time_dict['real'],time_dict['sys'],time_dict['user']))
     meta_folder = os.path.join(FLAGS.output,'meta')
     if os.path.isdir(FLAGS.input):
         file_pre='all'
@@ -194,7 +197,8 @@ def run(args):
     path_meta=os.path.join(meta_folder,file_pre+'.meta')
     with open(path_meta,'a+') as out_meta:
         out_meta.write("# Wall_time Sys_time User_time Cpu_time\n")
-        out_meta.write("%5.3f %5.3f %5.3f %5.3f\n" %(time_dict['real'],time_dict['sys'],time_dict['user'],time_dict['sys']+time_dict['user']))
+        out_meta.write("%5.3f \n" %(time_dict['real']))
+        # out_meta.write("%5.3f %5.3f %5.3f %5.3f\n" %(time_dict['real'],time_dict['sys'],time_dict['user'],time_dict['sys']+time_dict['user']))
 if __name__=="__main__":
     parser=argparse.ArgumentParser(prog='chiron',description='A deep neural network basecaller.')
     parser.add_argument('-i','--input',default='example_data/output/raw', help="File path or Folder path to the fast5 file.")

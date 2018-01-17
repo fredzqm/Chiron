@@ -135,13 +135,13 @@ class DataSet(object):
         return self._perm
     
     def read_into_memory(self,index):
-        event = np.asarray(zip([self._event[i] for i in index],[self._event_length[i] for i in index]))
+        event = np.array(list(zip([np.array(self._event[i]) for i in index],[self._event_length[i] for i in index])))
         if not self.for_eval:
-            label = np.asarray(zip([self._label[i] for i in index],[self._label_length[i] for i in index]))
+            label = np.array(list(zip([self._label[i] for i in index],[self._label_length[i] for i in index])))
         else:
             label = []
         return event,label
-    
+
     def next_batch(self, batch_size,shuffle = True):
         """Return next batch in batch_size from the data set.
             Input Args:
@@ -187,7 +187,8 @@ class DataSet(object):
         if not self._for_eval:
             label_batch = batch2sparse(label_batch)
         seq_length = event_batch[:,1].astype(np.int32)
-        return np.vstack(event_batch[:,0]).astype(np.float32),seq_length,label_batch
+        seq_data = np.vstack(event_batch[:,0]).astype(np.float32)
+        return seq_data,seq_length,label_batch
 def read_data_for_eval(file_path,start_index=0,step = 20,seg_length = 200):
     '''
     Input Args:

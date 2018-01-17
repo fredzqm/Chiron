@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Mon Aug 14 18:38:18 2017
@@ -10,6 +10,7 @@ import chiron_eval
 import chiron_rcnn_train
 from utils.extract_sig_ref import extract
 from utils import raw
+
 def evaluation(args):
     FLAGS=args
     FLAGS.input_dir=FLAGS.input
@@ -20,7 +21,7 @@ def evaluation(args):
 def export(args):
     raw.run(args)
     
-def main(arguments=sys.argv[1:]):
+def main(arguments):
     parser=argparse.ArgumentParser(prog='chiron',description='A deep neural network basecaller.')
     subparsers = parser.add_subparsers(title='sub command',help='sub command help')
     model_default_path=__file__+'/../model/DNA_default'
@@ -60,6 +61,8 @@ def main(arguments=sys.argv[1:]):
     
     args=parser.parse_args(arguments)
     args.func(args)
+
 if __name__=='__main__':
+    sys.argv = ['', 'call', '-i', 'example_data', '-o', '../output', '--batch_size', '200']
     print(sys.argv[1:])
-    main()    
+    main(sys.argv[1:])
