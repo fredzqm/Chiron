@@ -18,9 +18,7 @@ def evaluation(args):
     extract(FLAGS)
     FLAGS.input = FLAGS.output+'/raw/'
     chiron_eval.run(args)
-def export(args):
-    raw.run(args)
-    
+
 def main(arguments):
     parser=argparse.ArgumentParser(prog='chiron',description='A deep neural network basecaller.')
     subparsers = parser.add_subparsers(title='sub command',help='sub command help')
@@ -44,7 +42,7 @@ def main(arguments):
     parser_export.add_argument('-o','--output',required=True,help='Output folder.')
     parser.add_argument('--basecall_group',default = 'Basecall_1D_000',help = 'Basecall group Nanoraw resquiggle into. Default is Basecall_1D_000')
     parser.add_argument('--basecall_subgroup',default = 'BaseCalled_template',help = 'Basecall subgroup Nanoraw resquiggle into. Default is BaseCalled_template')
-    parser_export.set_defaults(func=export)
+    parser_export.set_defaults(func=raw.run)
     
     #parser for 'train' command
     parser_train=subparsers.add_parser('train',description='Model training',help='Train a model.')
