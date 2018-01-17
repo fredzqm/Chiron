@@ -3,9 +3,8 @@ from __future__ import division
 from __future__ import print_function
 import numpy as np
 import tensorflow as tf
-from tensorflow.contrib.rnn.python.ops.core_rnn_cell import RNNCell
 
-class LSTMCell(RNNCell):
+class LSTMCell(tf.contrib.rnn.RNNCell):
     '''Vanilla LSTM implemented with same initializations as BN-LSTM'''
     def __init__(self, num_units):
         self.num_units = num_units
@@ -45,7 +44,7 @@ class LSTMCell(RNNCell):
 
             return new_h, (new_c, new_h)
 
-class BNLSTMCell(RNNCell):
+class BNLSTMCell(tf.contrib.rnn.RNNCell):
     '''Batch normalized LSTM as described in arxiv.org/abs/1603.09025'''
     def __init__(self, num_units, training):
         self.num_units = num_units

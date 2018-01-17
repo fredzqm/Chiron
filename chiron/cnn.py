@@ -7,7 +7,6 @@ Created on Sat Apr 15 02:48:26 2017
 """
 
 import tensorflow as tf
-from tensorflow.contrib.layers import batch_norm
 
 def conv_layer(indata,ksize,padding,training,name,dilate = 1,strides=[1,1,1,1],bias_term = False,active = True,BN= True):
     """A standard convlotional layer"""

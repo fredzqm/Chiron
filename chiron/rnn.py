@@ -9,7 +9,6 @@ Created on Fri Apr 21 03:46:35 2017
 import tensorflow as tf
 import numpy as np
 #from tensorflow.contrib.rnn.python.ops.core_rnn_cell import LSTMCell
-from tensorflow.contrib.rnn import LSTMCell
 from utils.lstm import BNLSTMCell
 from tensorflow.contrib.rnn.python.ops.rnn import stack_bidirectional_dynamic_rnn
 def rnn_layers(x,seq_length,training,hidden_num=100,layer_num = 3,class_n = 5):
@@ -18,8 +17,8 @@ def rnn_layers(x,seq_length,training,hidden_num=100,layer_num = 3,class_n = 5):
     for i in range(layer_num):
         #cell_fw = BNLSTMCell(hidden_num,training = training)#,training)
         #cell_bw = BNLSTMCell(hidden_num,training = training)#,training)
-        cell_fw = LSTMCell(hidden_num)
-    cell_bw = LSTMCell(hidden_num)
+        cell_fw = tf.contrib.rnn.LSTMCell(hidden_num)
+    cell_bw = tf.contrib.rnn.LSTMCell(hidden_num)
     cells_fw.append(cell_fw)
     cells_bw.append(cell_bw)
     with tf.variable_scope('BDLSTM_rnn') as scope:
