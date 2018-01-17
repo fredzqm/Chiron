@@ -58,7 +58,7 @@ def get_label_segment(fast5_fn, basecall_group, basecall_subgroup):
         #Read corrected data
         corr_dat = fast5_data['/Analyses/RawGenomeCorrected_000/' + basecall_subgroup + '/Events']
         corr_attrs = dict(corr_dat.attrs.items())
-        corr_dat = corr_dat .value
+        corr_dat = corr_dat.value
     except:
         raise RuntimeError(
             'Corrected data know found.')
@@ -124,8 +124,8 @@ def get_label_raw(fast5_fn, basecall_group, basecall_subgroup):
 
     #Get raw data
     try:
-        raw_dat   = fast5_data['/Raw/Reads/'].values()[0]
-        #raw_attrs = raw_dat.attrs
+        raw_dat = next(iter(fast5_data['Raw/Reads'].values()))
+        raw_attrs = raw_dat.attrs
         raw_dat = raw_dat['Signal'].value
     except:
         raise RuntimeError(
@@ -133,13 +133,14 @@ def get_label_raw(fast5_fn, basecall_group, basecall_subgroup):
             'new segments cannot be identified.')
 
     # Read corrected data
+    basecall_subgroup = 'Read_104'
     try:
-        corr_data = fast5_data['/Analyses/RawGenomeCorrected_000/' + basecall_subgroup + '/Events']
+        corr_data = fast5_data['/Analyses/EventDetection_000/Reads/' + basecall_subgroup + '/Events']
         corr_attrs = dict(corr_data.attrs.items())
         corr_data = corr_data .value
     except:
         raise RuntimeError(
-            'Corrected data know found.')
+            'Corrected data know found. at ' + '/Analyses/EventDetection_000/Reads/' + basecall_subgroup + '/Events')
 
     fast5_info = fast5_data['UniqueGlobalKey/channel_id'].attrs
     #sampling_rate = fast5_info['sampling_rate'].astype('int_')

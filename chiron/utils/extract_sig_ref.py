@@ -30,13 +30,10 @@ def extract(FLAGS):
         os.mkdir(ref_folder)
     for file_n in os.listdir(root_folder):
         if file_n.endswith('fast5'):
-            try:
-                raw_signal,reference = extract_file(root_folder+os.path.sep+file_n)
-                count+=1
-                if len(raw_signal)==0:
-                    print ("Failed in extracting "+(os.path.join(raw_folder,os.path.splitext(file_n)[0]+'.signal')))
-                    continue
-            except:
+            raw_signal,reference = extract_file(root_folder+os.path.sep+file_n)
+            count+=1
+            if len(raw_signal)==0:
+                print ("Failed in extracting "+(os.path.join(raw_folder,os.path.splitext(file_n)[0]+'.signal')))
                 continue
             signal_file = open(os.path.join(raw_folder,os.path.splitext(file_n)[0]+'.signal'),'w+')
             signal_file.write(" ".join([str(val) for val in raw_signal]))
@@ -52,7 +49,7 @@ def extract_file(input_file):
     except:
         return False
     raw_attr = input_data['Raw/Reads/']
-    read_name = raw_attr.keys()[0]
+    read_name = next(iter(raw_attr.keys()))
     raw_signal = raw_attr[read_name+'/Signal'].value
     try:
         reference = input_data['Analyses/Basecall_1D_000/BaseCalled_template/Fastq'].value
