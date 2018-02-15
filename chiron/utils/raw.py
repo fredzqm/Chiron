@@ -39,6 +39,7 @@ def extract_file(input_file,output_file):
     f_signal.close()
     f_label.close()
     return True
+
 def run(args):
     global FLAGS
     FLAGS = args

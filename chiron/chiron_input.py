@@ -258,14 +258,14 @@ def read_raw_data_sets(data_dir,h5py_file_path=None,seq_length = 300,k_mer = 1,m
         for name in os.listdir(data_dir):
             if name.endswith(".signal"):
                 file_pre = os.path.splitext(name)[0]
-                f_signal = read_signal(data_dir+name)
+                f_signal = read_signal(os.path.join(data_dir,name))
                 if len(f_signal)==0:
                     continue
-                try:
-                    f_label = read_label(data_dir+file_pre+'.label',skip_start = 10,window_n = (k_mer-1)/2)
-                except:
-                    sys.stdout.write("Read the label %s fail.Skipped."%(name))
-                    continue
+                # try:
+                f_label = read_label(os.path.join(data_dir,file_pre+'.label'),skip_start = 10,window_n = int((k_mer-1)/2))
+                # except Exception as e:
+                #     sys.stdout.write("Read the label %s fail.Skipped."%(name))
+                #     continue
     
     #            if seq_length<max(f_label.length):
     #                print("Sequence length %d is samller than the max raw segment length %d, give a bigger seq_length"\
